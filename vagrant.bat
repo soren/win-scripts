@@ -2,7 +2,8 @@
 
 setlocal enableDelayedExpansion
 
-set PATH=C:\HashiCorp\Vagrant\bin;%PATH%
+for /f "usebackq tokens=*" %%v in (`where vagrant.exe`) do set vagrant_cmd=%%v
+set PATH=%vagrant_cmd:\vagrant.exe=%;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem
 
 if "%1" == "connect" goto:connect
 vagrant %*
@@ -17,9 +18,9 @@ if not "%status%" == "running" echo Virtual Machine isn't running, please call '
 echo Getting SSH Configuration...
 for /f "usebackq tokens=1,2 delims= " %%a in (`vagrant ssh-config`) do (
     if %%a == HostName set host=%%b
-    if %%a == User set user=%%b
-    if %%a == Port set port=%%b
-    if %%a == IdentityFile set key=%%b
+	if %%a == User set user=%%b
+	if %%a == Port set port=%%b
+	if %%a == IdentityFile set key=%%b
 )
 
 echo Starting: PuTTY %user%@%host% -P %port% -i "%key%.ppk"
