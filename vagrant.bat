@@ -2,8 +2,9 @@
 
 setlocal enableDelayedExpansion
 
+for /f "usebackq tokens=*" %%p in (`where putty.exe`) do set putty_cmd=%%p
 for /f "usebackq tokens=*" %%v in (`where vagrant.exe`) do set vagrant_cmd=%%v
-set PATH=%vagrant_cmd:\vagrant.exe=%;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem
+set PATH=%vagrant_cmd:\vagrant.exe=%;%putty_cmd:\putty.exe=%;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem
 
 if "%1" == "connect" goto:connect
 vagrant %*
